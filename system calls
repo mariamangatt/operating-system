@@ -1,0 +1,59 @@
+#fork
+#include<stdio.h>
+#include<unistd.h>
+#include<sys/types.h>
+int main()
+{
+fork();
+fork();
+fork();
+printf("hello world");
+}
+
+#pid
+#include<stdlib.h>
+#include<stdio.h>
+#include<sys/types.h>
+#include<unistd.h>
+#include<sys/wait.h>
+int main()
+{
+pid_t pid=fork();
+if (pid==0)
+{
+printf("Hello\n");
+exit(EXIT_SUCCESS);
+}
+else if (pid>0)
+{
+wait (NULL);
+printf("Main task\n");
+}
+else
+{
+printf("unable to create");
+}
+return EXIT_SUCCESS;
+}
+
+#execlp
+#include<stdlib.h>
+#include<stdio.h>
+#include<sys/types.h>
+#include<unistd.h>
+#include<sys/wait.h>
+void main()
+{
+execlp("./fork","first",NULL);
+}
+
+#stat
+#include<stdlib.h>
+#include<stdio.h>
+#include<sys/stat.h>
+void main()
+{
+struct stat sfile;
+stat ("fork.c",&sfile);
+printf("st_size=%ld\n",sfile.st_size);
+}
