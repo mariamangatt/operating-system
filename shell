@@ -1,0 +1,55 @@
+#to check the given number is odd or even.
+echo "enter a number"
+read n
+
+if [ `expr $n % 2` == 0 ]
+then
+  echo "$n is even"
+else
+  echo "$n is odd"
+fi 
+
+#print largest among two numbers.
+echo "enter num1"
+read num1
+echo "enter num2"
+read num2
+if [ $num1 -gt $num2 ]
+then
+ echo $num1
+else
+ echo $num2
+fi
+
+#factorial of a given number.
+echo "enter a number"
+read num
+fact=1
+while [ $num -gt 1 ]
+do
+ fact=$((fact * num))
+ num=$((num-1))
+done
+
+# even numbers between 1 to 100.
+echo "Even numbers between 1 to 100:"
+for (( i=1; i<=100; i++ ));
+do
+    if (( i % 2 == 0 ));
+    then
+        echo $i
+    fi
+done
+
+# print the reverse of a given number.
+echo "enter a number"
+read num
+reverse=""
+while [ $num -gt 0 ];
+do
+    remainder=$((num % 10))
+    reverse="${reverse}${remainder}"
+    num=$((num / 10))
+done
+echo "Reverse of the number is: $reverse"
+echo $fact
