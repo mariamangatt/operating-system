@@ -1,0 +1,93 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+struct process {
+    int pid;
+    int at;
+    int bt;
+    int priority; 
+    int tat;
+    int wt;
+    int ct;
+} p[20], temp;  
+
+void swap(int i, int j) {
+    temp = p[i];
+    p[i] = p[j];
+    p[j] = temp;
+}
+
+void atsort(int n) {
+    for (int i = 0; i < n; i++) {
+        for (int j = i + 1; j < n; j++) {
+            if (p[i].at > p[j].at) {
+                swap(i, j);
+            }
+        }
+    }
+}
+
+void prioritysort(int n, int start) {
+    for (int i = start; i < n; i++) {
+        for (int j = i + 1; j < n; j++) {
+            if (p[i].priority > p[j].priority) {
+                swap(i, j);
+            }
+        }
+    }
+}
+
+void priority_schedule(int n) {
+    atsort(n); 
+    int ict = p[0].at; 
+
+    for (int i = 0; i < n; i++) {
+        if (ict < p[i].at) {
+            ict = p[i].at;
+        }
+        prioritysort(n, i);
+
+        p[i].ct = ict + p[i].bt; 
+        ict = p[i].ct; 
+
+        p[i].tat = p[i].ct - p[i].at; 
+        p[i].wt = p[i].tat - p[i].bt; 
+    }
+}
+
+int main() {
+    int n;
+    float avwt, avtat;
+    float twt = 0;
+    float ttat = 0;
+
+    printf("Enter the number of processes: ");
+    scanf("%d", &n);
+
+    for (int i = 0; i < n; i++) {
+        printf("Enter the Process ID of process %d: ", i + 1);
+        scanf("%d", &p[i].pid);
+        printf("Enter the Arrival Time of process %d: ", i + 1);
+        scanf("%d", &p[i].at);
+        printf("Enter the Burst Time of process %d: ", i + 1);
+        scanf("%d", &p[i].bt);
+        printf("Enter the Priority of process %d: ", i + 1);
+        scanf("%d", &p[i].priority);
+        printf("\n");
+    }
+
+    priority_schedule(n);
+
+    printf("\nPID\tAT\tBT\tPriority\tCT\tTAT\tWT\n");
+    for (int i = 0; i < n; i++) {
+        twt += p[i].wt;
+        ttat += p[i].tat;
+        printf("%d\t%d\t%d\t%d\t\t%d\t%d\t%d\n", p[i].pid, p[i].at, p[i].bt, p[i].priority, p[i].ct, p[i].tat, p[i].wt);
+    }
+    avwt = twt / (float)n;
+    avtat = ttat / (float)n;
+    printf("\nAverage Waiting Time: %f", avwt);
+    printf("\nAverage Turnaround Time: %f\n", avtat);
+
+    return 0;
+}
