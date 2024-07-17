@@ -1,0 +1,99 @@
+#include<stdio.h>
+#include<stdlib.h>
+
+struct process {
+    int pid;
+    int at;
+    int bt;
+    int ct;
+    int tat;
+    int wt;
+    int rt; // Remaining time
+} p[20];
+
+int n, tq;
+
+void atsort() {
+    for(int i = 0; i < n; i++) {
+        for(int j = i + 1; j < n; j++) {
+            if(p[i].at > p[j].at) {
+                struct process temp = p[i];
+                p[i] = p[j];
+                p[j] = temp;
+            }
+        }
+    }
+}
+
+int main() {
+    int time = 0, remain = 0;
+    float sumtat = 0, sumwt = 0, avgtat, avgwt;
+    printf("Enter the number of processes: ");
+    scanf("%d", &n);
+    for(int i = 0; i < n; i++) {
+        printf("Enter the process ID: ");
+        scanf("%d", &p[i].pid);
+        printf("Enter the Arrival Time: ");
+        scanf("%d", &p[i].at);
+        printf("Enter the Burst Time: ");
+        scanf("%d", &p[i].bt);
+        p[i].rt = p[i].bt;
+    }
+   
+    printf("Enter the Time Quantum: ");
+    scanf("%d", &tq);
+   
+    atsort();
+    printf("Round Robin Scheduling:\n");
+    printf("ProcessID\tArrival Time\tBurst Time\tCompletion Time\tTAT\tWT\n");
+
+    int queue[20];
+    int front = 0, rear = 0;
+    int i = 0;    //track current process
+    queue[rear++] = i;  //The initial process (with index 0) is added to the queue
+    int visited[20] = {0};
+    visited[i] = 1;     // Mark the initial process as visited.
+
+    while(remain != n) {
+        if (front != rear) {
+            i = queue[front++];
+        } else {
+            time++;
+            continue;
+        }
+
+        if(p[i].rt > tq) {
+            time += tq;
+            p[i].rt -= tq;
+        } else {
+            time += p[i].rt;
+            p[i].ct = time;
+            p[i].tat = p[i].ct - p[i].at;
+            p[i].wt = p[i].tat - p[i].bt;
+            sumtat += p[i].tat;
+            sumwt += p[i].wt;
+            p[i].rt = 0;
+            remain++;
+        }
+
+        for(int j = 0; j < n; j++) {
+            if (p[j].at <= time && p[j].rt > 0 && visited[j] == 0) {
+                queue[rear++] = j;
+                visited[j] = 1;
+            }
+        }
+
+        if(p[i].rt > 0) {
+            queue[rear++] = i;
+        }
+    }
+
+    for(int i = 0; i < n; i++) {
+        printf("%d\t\t%d\t\t%d\t\t%d\t\t%d\t%d\n", p[i].pid, p[i].at, p[i].bt, p[i].ct, p[i].tat, p[i].wt);
+    }
+   
+    avgtat = sumtat / n;
+    avgwt = sumwt / n;
+    printf("Average TAT: %f\n", avgtat);
+    printf("Average WT: %f\n", avgwt);
+}
