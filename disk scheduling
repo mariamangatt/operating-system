@@ -1,0 +1,102 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <math.h>
+
+void fcfs(int arr[], int head, int n) {
+    int seek_count = 0;
+    int curr_track, dist;
+    
+    for (int i = 0; i < n; i++) {
+        curr_track = arr[i];
+        dist = abs(head - curr_track);
+        seek_count += dist;
+        head = curr_track;
+    }
+    
+    printf("Total number of seek operations: %d\n", seek_count);
+    printf("Seek sequence is: ");
+    for (int i = 0; i < n; i++) {
+        printf("%d ", arr[i]);
+    }
+    printf("\n");
+}
+
+int main() {
+    int head, n;
+    
+    printf("Enter the number of elements: ");
+    scanf("%d", &n);
+    
+    int arr[n];
+    printf("Enter the elements: ");
+    for (int i = 0; i < n; i++) {
+        scanf("%d", &arr[i]);
+    }
+    
+    printf("Enter the initial head position: ");
+    scanf("%d", &head);
+    
+    fcfs(arr, head, n);
+    
+    return 0;
+}
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <math.h>
+
+int DiskScheduling_CSCAN(int rq[], int n, int head, int totalTrack) {
+    int trackMovement = 0;
+    int max = 0, min = totalTrack;
+    int index = 0;
+
+    // Sort the request queue
+    for (int i = 0; i < n; i++) {
+        for (int j = i + 1; j < n; j++) {
+            if (rq[i] > rq[j]) {
+                int temp = rq[i];
+                rq[i] = rq[j];
+                rq[j] = temp;
+            }
+        }
+    }
+
+    // Find the position of the head in the sorted request queue
+    for (int i = 0; i < n; i++) {
+        if (head < rq[i]) {
+            index = i;
+            break;
+        }
+    }
+
+    // Move from head to the end of the disk
+ 
+        trackMovement += abs(head - totalTrack);
+        head=totalTrack;
+
+    // Move from the end of the disk to the beginning
+    trackMovement += abs(head-0);
+    head = 0;
+
+    // Move from the beginning to the first request
+ 
+        trackMovement += abs(head - rq[index-1]);
+    return trackMovement;
+}
+
+int main() {
+    printf("\nC-SCAN Disk Scheduling\n\n");
+    int n, requestQueue[200], head, totalTrack;
+    printf("Kindly enter the number of tracks present in request queue: ");
+    scanf("%d", &n);
+    for (int i = 0; i < n; i++) {
+        printf("Kindly enter track number %d: ", i + 1);
+        scanf("%d", &requestQueue[i]);
+    }
+    printf("\nKindly enter the total number of tracks in the disk: ");
+    scanf("%d", &totalTrack);
+    printf("\nKindly enter the current position of R/W head: ");
+    scanf("%d", &head);
+    int trackMovement = DiskScheduling_CSCAN(requestQueue, n, head, totalTrack);
+    printf("\nThe total number of track movement using C-SCAN is: %d\n", trackMovement);
+}
