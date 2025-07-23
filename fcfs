@@ -7,7 +7,7 @@ struct process {
     int ct;
     int tat;
     int wt;
-} p[100], temp;
+} p[100], temp; 
 
 int n;
 
