@@ -1,5 +1,5 @@
 #to check the given number is odd or even.    
-echo "enter a number"
+echo "enter a number" 
 read n
 
 if [ `expr $n % 2` == 0 ] 
