@@ -1,4 +1,4 @@
-#to check the given number is odd or even.
+#to check the given number is odd or even.    
 echo "enter a number"
 read n
 
