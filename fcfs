@@ -4,7 +4,7 @@ struct process {
     int pid;
     int at;
     int bt; 
-    int ct;
+    int ct; 
     int tat;
     int wt;
 } p[100], temp; 
